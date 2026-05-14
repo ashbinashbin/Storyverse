@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000/api";
+const API_URL = "https://9qb4hppm-5000.inc1.devtunnels.ms/api";
 
 // =========================
 // TOKEN
@@ -93,7 +93,7 @@ export const likeStory = async (
     localStorage.getItem("token");
 
   const response = await fetch(
-    `http://localhost:5000/api/stories/${id}/like`,
+    `https://9qb4hppm-5000.inc1.devtunnels.ms/api/stories/${id}/like`,
     {
       method: "POST",
 
@@ -119,7 +119,7 @@ export const getAllStories =
 
     const response =
       await fetch(
-        "http://localhost:5000/api/stories"
+        "https://9qb4hppm-5000.inc1.devtunnels.ms/api/stories"
       );
 
     return response.json();
@@ -141,7 +141,7 @@ export const createStory =
 
     const response =
       await fetch(
-        "http://localhost:5000/api/stories",
+        "https://9qb4hppm-5000.inc1.devtunnels.ms/api/stories",
         {
           method: "POST",
 
@@ -176,7 +176,7 @@ export const getProfile =
 
     const response =
       await fetch(
-        "http://localhost:5000/api/users/me",
+        "https://9qb4hppm-5000.inc1.devtunnels.ms/api/users/me",
         {
           headers: {
             Authorization:
@@ -200,7 +200,7 @@ export const getMyStories =
 
     const response =
       await fetch(
-        "http://localhost:5000/api/stories/my",
+        "https://9qb4hppm-5000.inc1.devtunnels.ms/api/stories/my",
         {
           headers: {
             Authorization:
@@ -226,7 +226,7 @@ export const updateProfileImage =
 
     const response =
       await fetch(
-        "http://localhost:5000/api/users/profile-image",
+        "https://9qb4hppm-5000.inc1.devtunnels.ms/api/users/profile-image",
         {
           method: "PUT",
 
@@ -261,7 +261,7 @@ export const updateUsername =
 
     const response =
       await fetch(
-        "http://localhost:5000/api/users/update-username",
+        "https://9qb4hppm-5000.inc1.devtunnels.ms/api/users/update-username",
         {
           method: "PUT",
 
