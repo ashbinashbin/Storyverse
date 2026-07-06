@@ -1,4 +1,4 @@
-const API_URL = "https://9qb4hppm-5000.inc1.devtunnels.ms/api";
+const API_URL = "http://localhost:5000/api";
 
 // =========================
 // TOKEN
@@ -93,7 +93,7 @@ export const likeStory = async (
     localStorage.getItem("token");
 
   const response = await fetch(
-    `https://9qb4hppm-5000.inc1.devtunnels.ms/api/stories/${id}/like`,
+    `${API_URL}/stories${id}/like`,
     {
       method: "POST",
 
@@ -119,7 +119,7 @@ export const getAllStories =
 
     const response =
       await fetch(
-        "https://9qb4hppm-5000.inc1.devtunnels.ms/api/stories"
+        `${API_URL}/stories`
       );
 
     return response.json();
@@ -141,7 +141,7 @@ export const createStory =
 
     const response =
       await fetch(
-        "https://9qb4hppm-5000.inc1.devtunnels.ms/api/stories",
+        `${API_URL}/stories`,
         {
           method: "POST",
 
@@ -176,7 +176,7 @@ export const getProfile =
 
     const response =
       await fetch(
-        "https://9qb4hppm-5000.inc1.devtunnels.ms/api/users/me",
+        `${API_URL}/users/me`,
         {
           headers: {
             Authorization:
@@ -200,7 +200,7 @@ export const getMyStories =
 
     const response =
       await fetch(
-        "https://9qb4hppm-5000.inc1.devtunnels.ms/api/stories/my",
+        `${API_URL}/stories/my`,
         {
           headers: {
             Authorization:
@@ -226,7 +226,7 @@ export const updateProfileImage =
 
     const response =
       await fetch(
-        "https://9qb4hppm-5000.inc1.devtunnels.ms/api/users/profile-image",
+        `${API_URL}/users/profile-image`,
         {
           method: "PUT",
 
@@ -261,7 +261,7 @@ export const updateUsername =
 
     const response =
       await fetch(
-        "https://9qb4hppm-5000.inc1.devtunnels.ms/api/users/update-username",
+        `${API_URL}/users/update-username`,
         {
           method: "PUT",
 
@@ -276,6 +276,70 @@ export const updateUsername =
           body: JSON.stringify({
             username,
           }),
+        }
+      );
+
+    return response.json();
+  };
+export const updateBio = async (
+  bio: string
+) => {
+
+  const token =
+    localStorage.getItem("token");
+
+  const response = await fetch(
+    `${API_URL}/users/bio`,
+    {
+      method: "PUT",
+
+      headers: {
+        "Content-Type":
+          "application/json",
+
+        Authorization:
+          `Bearer ${token}`,
+      },
+
+      body: JSON.stringify({
+        bio,
+      }),
+    }
+  );
+
+  return response.json();
+};
+export const uploadProfileImage =
+  async (
+    file: File
+  ) => {
+
+    const token =
+      localStorage.getItem(
+        "token"
+      );
+
+    const formData =
+      new FormData();
+
+    formData.append(
+      "image",
+      file
+    );
+
+    const response =
+      await fetch(
+        `${API_URL}/users/upload-profile`,
+        {
+          method: "POST",
+
+          headers: {
+            Authorization:
+              `Bearer ${token}`,
+          },
+
+          body:
+            formData,
         }
       );
 

@@ -11,6 +11,8 @@ import {
   getMyStories,
   updateProfileImage,
   updateUsername,
+  updateBio,
+  uploadProfileImage,
 } from "@/services/api";
 
 interface Story {
@@ -33,6 +35,9 @@ export default function ProfilePage() {
 
   const [profileImage, setProfileImage] =
     useState("");
+  
+  const [bio, setBio] =
+    useState("");
 
   // EDIT STATES
   const [newUsername, setNewUsername] =
@@ -54,6 +59,8 @@ export default function ProfilePage() {
 
   const [message, setMessage] =
     useState("");
+  
+  
 
   // FETCH PROFILE + STORIES
   useEffect(() => {
@@ -64,6 +71,7 @@ export default function ProfilePage() {
 
         const profileData =
           await getProfile();
+          console.log("PROFILE DATA:", profileData);
 
         const storiesData =
           await getMyStories();
@@ -71,6 +79,10 @@ export default function ProfilePage() {
         // PROFILE
         const user =
           profileData.data;
+
+          setBio(
+            user.bio || ""
+          );
 
         setUsername(
           user.username
@@ -143,21 +155,7 @@ export default function ProfilePage() {
             newUsername
           );
         }
-
-        // UPDATE IMAGE
-        if (
-          newProfileImage !==
-          profileImage
-        ) {
-
-          await updateProfileImage(
-            newProfileImage
-          );
-
-          setProfileImage(
-            newProfileImage
-          );
-        }
+         await updateBio(bio);
 
         setMessage(
           "Profile updated successfully"
@@ -175,7 +173,31 @@ export default function ProfilePage() {
 
         setSaving(false);
       }
+     
     };
+    // UPDATE PROFILE IMAGE
+        const handleImageUpload = async (e:React.ChangeEvent<HTMLInputElement>) => {
+
+          const file =
+            e.target.files?.[0];
+
+          if (!file)
+            return;
+
+          const data =
+            await uploadProfileImage(
+              file
+            );
+
+          if (
+            data.success
+          ) {
+
+            setProfileImage(
+              data.profileImage
+            );
+          }
+        };
 
   return (
     <div className="bg-[#151217] text-white min-h-screen">
@@ -266,28 +288,70 @@ export default function ProfilePage() {
                         className="w-full bg-[#151217] border border-white/5 rounded-xl px-4 py-3 opacity-60"
                       />
                     </div>
-
-                    {/* PROFILE IMAGE */}
                     <div>
 
                       <label className="block text-sm text-[#cdc3d0] mb-2">
 
-                        Profile Image URL
+                        Bio
+
                       </label>
 
-                      <input
-                        type="text"
-                        value={
-                          newProfileImage
-                        }
+                      <textarea
+                        value={bio}
                         onChange={(e) =>
-                          setNewProfileImage(
+                          setBio(
                             e.target.value
                           )
                         }
-                        className="w-full bg-[#151217] border border-white/5 rounded-xl px-4 py-3 outline-none focus:border-[#ddb7ff]"
+                        rows={4}
+                        maxLength={300}
+                        placeholder="Tell readers about yourself..."
+                        className="w-full bg-[#151217] border border-white/5 rounded-xl px-4 py-3 outline-none focus:border-[#ddb7ff] resize-none"
                       />
+
+                      <p className="text-xs text-[#cdc3d0] mt-1">
+
+                        {bio.length}/300
+
+                      </p>
+
                     </div>
+
+                    {/* PROFILE IMAGE */}
+                    <label
+                      htmlFor="profile-upload"
+                      className="
+                        inline-flex
+                        items-center
+                        px-4
+                        py-3
+                        rounded-xl
+                        bg-[#ddb7ff]
+                        text-[#40215e]
+                        font-semibold
+                        cursor-pointer
+                        hover:opacity-90
+                      "
+                    >
+                      Choose Profile Photo
+                    </label>
+
+                    <input
+                      id="profile-upload"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      className="hidden"
+                    />
+                    {bio && (
+
+                      <p className="text-[#cdc3d0] text-sm mt-3 max-w-md">
+
+                        {bio}
+
+                      </p>
+
+                    )}
 
                     {/* BUTTON */}
                     <button

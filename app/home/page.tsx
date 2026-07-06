@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useUser } from "@/app/context/UserContext";
 
 import Sidebar from "@/components/home/Sidebar";
 import Topbar from "@/components/home/Topbar";
@@ -9,6 +10,7 @@ import TrendingSection from "@/components/home/TrendingSection";
 
 import {
   getAllStories,
+  getProfile,
 } from "@/services/api";
 
 interface Story {
@@ -34,39 +36,62 @@ export default function HomePage() {
   const [search, setSearch] =
     useState("");
 
+  const { setUser } = useUser();
+
+
   // FETCH STORIES
-  useEffect(() => {
+useEffect(() => {
 
-    const fetchStories = async () => {
+  const fetchData = async () => {
 
-      try {
+    try {
 
-        const data =
-          await getAllStories();
+      const [
+        storiesData,
+        profileData,
+      ] = await Promise.all([
+        getAllStories(),
+        getProfile(),
+      ]);
 
-        // BACKEND FORMAT SAFETY
-        if (data.data) {
+      // STORIES
+      if (storiesData.data) {
 
-          setStories(data.data);
+        setStories(
+          storiesData.data
+        );
 
-        } else {
+      } else {
 
-          setStories(data);
-        }
-
-      } catch (error) {
-
-        console.log(error);
-
-      } finally {
-
-        setLoading(false);
+        setStories(
+          storiesData
+        );
       }
-    };
 
-    fetchStories();
+      // USER CONTEXT
+      if (
+        profileData.success
+      ) {
 
-  }, []);
+        setUser(
+          profileData.data
+        );
+      }
+
+    } catch (error) {
+
+      console.log(error);
+
+    } finally {
+
+      setLoading(false);
+
+    }
+  };
+
+  fetchData();
+
+}, [setUser]);
 
   // FILTER STORIES
   const filteredStories =

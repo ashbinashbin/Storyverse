@@ -8,8 +8,11 @@ import {
   Sparkles,
 } from "lucide-react";
 
+import {
+  useUser,
+} from "@/app/context/UserContext";
+
 interface TopbarProps {
-  profileImage?: string;
   search?: string;
   setSearch?: (
     value: string
@@ -17,10 +20,13 @@ interface TopbarProps {
 }
 
 export default function Topbar({
-  profileImage,
   search,
   setSearch,
 }: TopbarProps) {
+
+  const { user } =
+    useUser();
+
   return (
     <div className="hidden lg:flex items-center justify-between px-10 h-20 sticky top-0 bg-[#151217]/80 backdrop-blur-md z-40">
 
@@ -55,6 +61,7 @@ export default function Topbar({
           <span className="text-sm font-medium">
             Inspiration
           </span>
+
         </button>
 
         <Bell
@@ -62,7 +69,6 @@ export default function Topbar({
           className="text-[#cdc3d0]"
         />
 
-        {/* CREATE BUTTON */}
         <Link
           href="/create"
           className="bg-[#f0daff] text-[#40215e] px-6 py-2 rounded-full text-sm font-bold"
@@ -78,13 +84,15 @@ export default function Topbar({
 
           <img
             src={
-              profileImage ||
+              user?.profileImage ||
               "https://i.pravatar.cc/100"
             }
             alt="profile"
             className="w-full h-full object-cover"
           />
+
         </Link>
+
       </div>
     </div>
   );
